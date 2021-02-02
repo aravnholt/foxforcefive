@@ -1,0 +1,56 @@
+# This is a basic workflow to help you get started with Actions
+
+name: trips
+
+defaults:
+ run:
+  shell: bash
+  working-directory: apis/trips
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ master ]
+    paths: 
+      - /apis/trips/**
+      - .github/workflows/trips.yml
+  pull_request:
+    branches: [ master ]
+    paths:
+      - /apis/trips/**
+      - .github/workflows/trips.yml
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+          
+     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Runs a single command using the runners shell
+      - name: Run unit test
+        run: go test ./tests
+      
+      # When run on failure log issue
+      - name: Run on failure
+      - uses: actions/github-script@0.9.0
+        if: failure()
+        with:
+         github-token: ${{secrets.GITHUB_TOKEN}}
+         script: |
+          let body = "${{ env.build_name }} Worflow Failure \n Build Number: ${{ github.run_number }} \n Build Log: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }} \n SHA: [${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }}) \n";
+          github.issues.create({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            title: "${{ env.build_name }} Workflow ${{ github.run_number }} Failed! ",
+            body: body
+          });
