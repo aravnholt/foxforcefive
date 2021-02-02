@@ -19,3 +19,5 @@ jobs:
         uses: hattan/verify-linked-issue-action@v1.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          message: "You need to link your pull request to an issue"
