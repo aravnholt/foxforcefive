@@ -13,12 +13,12 @@ on:
   push:
     branches: [ master ]
     paths: 
-      - /apis/trips/**
+      - apis/trips/**
       - .github/workflows/trips.yml
   pull_request:
     branches: [ master ]
     paths:
-      - /apis/trips/**
+      - apis/trips/**
       - .github/workflows/trips.yml
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -42,7 +42,7 @@ jobs:
       
       # When run on failure log issue
       - name: Run on failure
-      - uses: actions/github-script@0.9.0
+        uses: actions/github-script@0.9.0
         if: failure()
         with:
          github-token: ${{secrets.GITHUB_TOKEN}}
