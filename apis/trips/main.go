@@ -1,4 +1,4 @@
-package main
+packdfsafddfadsfage main
 gfdsgjfdighfdsjkghbfjdskbgjkdfhbgjh
 import (
 	"flag"
