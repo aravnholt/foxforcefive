@@ -1,0 +1,6 @@
+# See for instructions on this file https://help.github.com/articles/about-codeowners/
+
+/apis/trips @jimmoyle
+/apis/poi @daltondhcp
+/apis/user-java @olguilla
+/apis/userprofile @victorar
