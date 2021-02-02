@@ -1,0 +1,21 @@
+# This is a basic workflow to help you get started with Actions
+
+name: RequireIssue
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  pull_request:
+    types: [edited, synchronize, opened, reopened]
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  verify_linked_issue:
+    runs-on: ubuntu-latest
+    name: Ensure Pull Request has a linked issue.
+    steps:
+      - name: Verify Linked Issue
+        uses: hattan/verify-linked-issue-action@v1.1.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
