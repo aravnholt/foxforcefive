@@ -11,11 +11,11 @@ defaults:
 # Controls when the action will run.
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
-  push:
-    branches: [master]
-    paths:
-      - apis/trips/**
-      - .github/workflows/trips.yml
+  # push:
+  #   branches: [master]
+  #   paths:
+  #     - apis/trips/**
+  #     - .github/workflows/trips.yml
   pull_request:
     branches: [master]
     paths:
@@ -56,7 +56,7 @@ jobs:
             });
 
   # This workflow contains a single job called "build"
-  build:
+  build-and-deploy:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
@@ -70,6 +70,14 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - run: |
-          echo "Building API-TRIPS image..."
+      - name: Build API-TRIPS image
+        run: |
           az acr build --image "devopsoh/api-trips:${{ github.sha }}" --registry openhackzkr4erh7acr --file Dockerfile .
+
+      - name: Deploy to staging
+        run: |
+          az webapp config container set --name openhackzkr4erh7trips --resource-group openhackzkr4erh7rg --slot Staging --docker-custom-image-name="DOCKER|openhackzkr4erh7acr.azurecr.io/devopsoh/api-trips:${{ github.sha }}"
+      # #TODO: Release gate?
+      # - name: Deploy to prod
+      #   run: |
+      #     az webapp deployment slot swap --name openhackzkr4erh7trips --resource-group openhackzkr4erh7rg --slot Staging --target-slot Production
