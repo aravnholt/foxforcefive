@@ -81,7 +81,7 @@ jobs:
 
       - name: Deploy to staging
         run: |
-          az webapp config container set --name openhackzkr4erh7trips --resource-group openhackzkr4erh7rg --slot Staging --docker-custom-image-name="DOCKER|openhackzkr4erh7acr.azurecr.io/devopsoh/api-userprofile:${{ github.sha }}"
+          az webapp config container set --name openhackzkr4erh7userprofile --resource-group openhackzkr4erh7rg --slot Staging --docker-custom-image-name="DOCKER|openhackzkr4erh7acr.azurecr.io/devopsoh/api-userprofile:${{ github.sha }}"
       # #TODO: Release gate?
       # - name: Deploy to prod
       #   run: |
