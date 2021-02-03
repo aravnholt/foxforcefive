@@ -73,7 +73,6 @@ jobs:
 
       - name: Build API-USERPROFILE image
         run: |
-          az acr build --image "devopsoh/api-trips:${{ github.sha }}" --registry openhackzkr4erh7acr --file Dockerfile .
           az acr build --image "devopsoh/api-userprofile:${{ github.sha }}" --registry openhackzkr4erh7acr --file Dockerfile .
 
       - name: Deploy to staging
