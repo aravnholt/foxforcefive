@@ -97,7 +97,7 @@ jobs:
       - name: Runs validation script
         shell: pwsh
         run: |
-          ../../scripts/PwshCheck.ps1 -uri https://openhackzkr4erh7trips.azurewebsites.net/api/healthcheck/trips
+          ../../scripts/PwshCheck.ps1 -uri https://openhackzkr4erh7trips-staging.azurewebsites.net/api/healthcheck/trips
 
 
   # This workflow contains a single job called "release"
