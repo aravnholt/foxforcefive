@@ -1,0 +1,88 @@
+# This is a basic workflow to help you get started with Actions
+# Hi
+
+name: userprofile
+
+defaults:
+  run:
+    shell: bash
+    working-directory: apis/userprofile
+
+# Controls when the action will run.
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [master]
+    paths:
+      - apis/userprofile/**
+      - .github/workflows/userprofile.yml
+  pull_request:
+    branches: [master]
+    paths:
+      - apis/userprofile/**
+      - .github/workflows/userprofile.yml
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "test"
+  test:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+        
+      # Install npm
+      - name: Install NPM
+        run: npm install
+        
+      # Runs a single command using the runners shell
+      - name: Run unit test
+        run: npm run test
+
+      # When run on failure log issue
+      - name: Run on failure
+        uses: actions/github-script@0.9.0
+        if: failure()
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            let body = "${{ env.build_name }} Worflow Failure \n Build Number: ${{ github.run_number }} \n Build Log: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }} \n SHA: [${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }}) \n";
+            github.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: "${{ env.build_name }} Workflow ${{ github.run_number }} Failed! ",
+              body: body
+            });
+
+  # This workflow contains a single job called "build"
+  build-and-deploy:
+    needs: [test]
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Build API-USERPROFILE image
+        run: |
+          az acr build --image "devopsoh/api-userprofile:${{ github.sha }}" --registry openhackzkr4erh7acr --file Dockerfile .
+
+      - name: Deploy to staging
+        run: |
+          az webapp config container set --name openhackzkr4erh7userprofile --resource-group openhackzkr4erh7rg --slot Staging --docker-custom-image-name="DOCKER|openhackzkr4erh7acr.azurecr.io/devopsoh/api-userprofile:${{ github.sha }}"
+      # #TODO: Release gate?
+      # - name: Deploy to prod
+      #   run: |
+      #     az webapp deployment slot swap --name openhackzkr4erh7trips --resource-group openhackzkr4erh7rg --slot Staging --target-slot Production
