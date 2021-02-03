@@ -96,7 +96,7 @@ jobs:
       - name: Runs validation script
         shell: pwsh
         run: |
-          ../../scripts/PwshCheck.ps1 -uri https://openhackzkr4erh7poi-staging.azurewebsites.net/api/healthcheck/poi
+          ../../../scripts/PwshCheck.ps1 -uri https://openhackzkr4erh7poi-staging.azurewebsites.net/api/healthcheck/poi
 
   # This workflow contains a single job called "Swap to production"
   SwapToProduction:
@@ -131,4 +131,4 @@ jobs:
       - name: Runs validation script
         shell: pwsh
         run: |
-          ../../scripts/PwshCheck.ps1 -uri https://openhackzkr4erh7poi.azurewebsites.net/api/healthcheck/poi
+          ../../../scripts/PwshCheck.ps1 -uri https://openhackzkr4erh7poi.azurewebsites.net/api/healthcheck/poi
