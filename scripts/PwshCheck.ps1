@@ -31,17 +31,18 @@ Param(
     [boolean] [Parameter(Mandatory = $false)] $displayUri
 )
 
+$iMax = 120
 $i = 0
-$output = while ($i -lt 10) {
+$output = while ($i -lt $iMax) {
     try {
         $R = Invoke-WebRequest -Uri $Uri -ErrorAction SilentlyContinue
     }
     catch {}
 
-    Write-Output $R.StatusCode
+    if ($R.StatusCode -eq 200) { break }
     Start-Sleep -Seconds 1
     $i++
 }
-if (-not ($output -contains 200)) {
+if ($i -eq $iMax) {
     Write-Error 'No 200 received'
 }
