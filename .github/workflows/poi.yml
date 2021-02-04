@@ -51,7 +51,8 @@ jobs:
       # Runs a single command using the runners shell
       - name: Run unit test
         # working-directory: apis/poi/tests/UnitTests
-        run: dotnet test apis/poi/tests/UnitTests --no-restore --verbosity detailed /p:CollectCoverage=true /p:CoverletOutput=lcov/ /p:CoverletOutputFormat=lcov
+        #run: dotnet test apis/poi/tests/UnitTests --no-restore --verbosity detailed /p:CollectCoverage=true /p:CoverletOutput=lcov/ /p:CoverletOutputFormat=lcov
+        run: dotnet test apis/poi/tests/UnitTests --no-restore --verbosity detailed
         
       - name: Find the file we are looking for
         run: find . -name '*.info'
