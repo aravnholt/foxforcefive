@@ -5,7 +5,7 @@ name: poi
 defaults:
   run:
     shell: bash
-    working-directory: apis/poi/web
+    # working-directory: apis/poi/web
 
 # Controls when the action will run.
 on:
@@ -36,13 +36,13 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Add dotnet package
-        working-directory: apis/poi/tests/UnitTests
+        # working-directory: apis/poi/tests/UnitTests
         run: dotnet add package coverlet.msbuild
 
       # Runs a single command using the runners shell
       - name: Run unit test
         # working-directory: apis/poi/tests/UnitTests
-        run: dotnet test ../tests/UnitTests --no-restore --verbosity normal /p:CollectCoverage=true /p:CoverletOutput=lcov/ /p:CoverletOutputFormat=lcov
+        run: dotnet test --no-restore --verbosity normal /p:CollectCoverage=true /p:CoverletOutput=lcov/ /p:CoverletOutputFormat=lcov
 
       - name: Coveralls
 
