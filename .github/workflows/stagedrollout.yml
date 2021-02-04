@@ -87,7 +87,7 @@ jobs:
       #   run: |
       #     az webapp deployment slot swap --name openhackzkr4erh7trips --resource-group openhackzkr4erh7rg --slot Staging --target-slot Production
 
-# This workflow contains a single job called "validate Staging"
+# This workflow contains a single jobs called "validate Staging"
   validateStaging:
     needs: [build-and-deploy]
     # The type of runner that the job will run on

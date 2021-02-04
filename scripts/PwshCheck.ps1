@@ -47,12 +47,13 @@ Param(
 )
 
 $i = 0
+$count = 0
 while ($i -lt $MaxTries) {
     try {
         $R = Invoke-WebRequest -Uri $Uri -ErrorAction SilentlyContinue
     }
     catch {}
-    $count = 0
+
     if ($R.StatusCode -eq 200) {
         $count++
     }
