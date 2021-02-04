@@ -99,7 +99,7 @@ jobs:
         run: |
           ../../scripts/PwshCheck.ps1 -uri https://openhackzkr4erh7trips-staging.azurewebsites.net/api/healthcheck/trips
 
- 
+
   # This workflow contains a single job called "Swap to production"
   SwapToProduction:
     needs: [validateStaging]
@@ -108,12 +108,12 @@ jobs:
         # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
         # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2  
+      - uses: actions/checkout@v2
         # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-  
+
       - name: Deploy to prod
         run: |
            az webapp deployment slot swap --name openhackzkr4erh7trips --resource-group openhackzkr4erh7rg --slot Staging --target-slot Production

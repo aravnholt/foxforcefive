@@ -38,7 +38,11 @@ Param(
 
         [Parameter(
             ValuefromPipelineByPropertyName = $true)]
-        [int]$MaxTries = 120
+        [int]$MaxTries = 120,
+
+        [Parameter(
+            ValuefromPipelineByPropertyName = $true)]
+        [int]$SuccessNumber = 1
 
 )
 
@@ -48,11 +52,16 @@ $i = 0
         $R = Invoke-WebRequest -Uri $Uri -ErrorAction SilentlyContinue
     }
     catch {}
-
-    if ($R.StatusCode -eq 200) { break }
+    $count = 0
+    if ($R.StatusCode -eq 200) {
+        $count ++
+    }
+    if($count -gt $SuccessNumber){
+        break
+    }
     Start-Sleep -Seconds 1
     $i++
 }
 if ($i -eq $MaxTries) {
-    Write-Error "No 200 received in $MaxTries tries"
+    Write-Error "Did not receive $SuccessNumber 200 received in $MaxTries tries"
 }
