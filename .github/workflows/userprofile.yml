@@ -35,14 +35,24 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-        
-      # Install npm
-      - name: Install NPM
-        run: npm install
-        
-      # Runs a single command using the runners shell
-      - name: Run unit test
-        run: npm run test
+
+      #Prepare node
+      - name: Use Node.js 10.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10.x
+
+      #Install and test
+      - name: npm install, make test-coverage
+        run: |
+          npm install
+          make test-coverage
+
+      #deploy coveralls
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       # When run on failure log issue
       - name: Run on failure
@@ -86,54 +96,3 @@ jobs:
       # - name: Deploy to prod
       #   run: |
       #     az webapp deployment slot swap --name openhackzkr4erh7trips --resource-group openhackzkr4erh7rg --slot Staging --target-slot Production
-
-# This workflow contains a single job called "validate Staging"
-  validateStaging:
-    needs: [build-and-deploy]
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-        # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-
-      - name: Runs validation script
-        shell: pwsh
-        run: |
-          ../../scripts/PwshCheck.ps1 -uri https://openhackzkr4erh7userprofile-staging.azurewebsites.net/api/healthcheck/user
-         
-
-  # This workflow contains a single job called "Swap to production"
-  SwapToProduction:
-    needs: [validateStaging]
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-        # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-        # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2  
-        # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-  
-      - name: Deploy to prod
-        run: |
-           az webapp deployment slot swap --name openhackzkr4erh7userprofile --resource-group openhackzkr4erh7rg --slot Staging --target-slot Production
-
-
- # This workflow contains a single job called "Validate production"
-  ValidateProduction:
-    needs: [SwapToProduction]
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-        # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-
-      - name: Runs validation script
-        shell: pwsh
-        run: |
-          ../../scripts/PwshCheck.ps1 -uri https://openhackzkr4erh7userprofile.azurewebsites.net/api/healthcheck/user
- 
