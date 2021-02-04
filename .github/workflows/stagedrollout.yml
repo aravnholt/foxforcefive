@@ -15,12 +15,12 @@ on:
     branches: [StagedRollout]
     paths:
       - apis/userprofile/**
-      - .github/workflows/userprofile.yml
+      - .github/workflows/stagedrollout.yml
   pull_request:
     branches: [StagedRollout]
     paths:
       - apis/userprofile/**
-      - .github/workflows/userprofile.yml
+      - .github/workflows/stagedrollout.yml
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
