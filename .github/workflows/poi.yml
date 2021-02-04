@@ -52,6 +52,9 @@ jobs:
       - name: Run unit test
         # working-directory: apis/poi/tests/UnitTests
         run: dotnet test apis/poi/tests/UnitTests --no-restore --verbosity normal /p:CollectCoverage=true /p:CoverletOutput=lcov/ /p:CoverletOutputFormat=lcov
+        
+      - name: Find the file we are looking for
+        run: find . -name '*.info'
 
       - name: Coveralls
         uses: coverallsapp/github-action@master
