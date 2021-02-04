@@ -41,7 +41,7 @@ jobs:
 
       - name: dotnet package restore
         working-directory: apis/poi/tests/UnitTests
-        run: dotnet package restore package restore
+        run: dotnet package restore
 
       # Runs a single command using the runners shell
       - name: Run unit test
