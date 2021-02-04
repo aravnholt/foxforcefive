@@ -56,7 +56,7 @@ while ($i -lt $MaxTries) {
     if ($R.StatusCode -eq 200) {
         $count++
     }
-    if ($count -gt $SuccessNumber) {
+    if ($count -ge $SuccessNumber) {
         break
     }
     Start-Sleep -Seconds 1
