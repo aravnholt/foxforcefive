@@ -115,7 +115,7 @@ jobs:
       - name: Run local k6 test
         uses: k6io/action@v0.1
         with:
-          filename: ../../scripts/load-test.js
+          filename: scripts/load-test.js
 
   # This workflow contains a single job called "Swap to production"
   SwapToProduction:
