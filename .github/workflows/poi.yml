@@ -41,8 +41,8 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Run unit test
-        working-directory: apis/poi/tests/UnitTests
-        run: dotnet test --no-restore --verbosity normal /p:CollectCoverage=true /p:CoverletOutput=lcov/ /p:CoverletOutputFormat=lcov
+        # working-directory: apis/poi/tests/UnitTests
+        run: dotnet test ../tests/UnitTests --no-restore --verbosity normal /p:CollectCoverage=true /p:CoverletOutput=lcov/ /p:CoverletOutputFormat=lcov
 
       - name: Coveralls
 
