@@ -28,35 +28,35 @@ PS > .\polling.ps1 -Uri https://github.com/Azure-Samples/openhack-devops-proctor
 
 [CmdletBinding()]
 Param(
-        [Parameter(
-            Position = 0,
-            ValuefromPipelineByPropertyName = $true,
-            ValuefromPipeline = $true,
-            Mandatory = $true
-        )]
-        $Uri,
+    [Parameter(
+        Position = 0,
+        ValuefromPipelineByPropertyName = $true,
+        ValuefromPipeline = $true,
+        Mandatory = $true
+    )]
+    $Uri,
 
-        [Parameter(
-            ValuefromPipelineByPropertyName = $true)]
-        [int]$MaxTries = 120,
+    [Parameter(
+        ValuefromPipelineByPropertyName = $true)]
+    [int]$MaxTries = 120,
 
-        [Parameter(
-            ValuefromPipelineByPropertyName = $true)]
-        [int]$SuccessNumber = 1
+    [Parameter(
+        ValuefromPipelineByPropertyName = $true)]
+    [int]$SuccessNumber = 1
 
 )
 
 $i = 0
-    while ($i -lt $MaxTries) {
+while ($i -lt $MaxTries) {
     try {
         $R = Invoke-WebRequest -Uri $Uri -ErrorAction SilentlyContinue
     }
     catch {}
     $count = 0
     if ($R.StatusCode -eq 200) {
-        $count ++
+        $count++
     }
-    if($count -gt $SuccessNumber){
+    if ($count -gt $SuccessNumber) {
         break
     }
     Start-Sleep -Seconds 1
