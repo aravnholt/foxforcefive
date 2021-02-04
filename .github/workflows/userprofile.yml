@@ -101,11 +101,25 @@ jobs:
         shell: pwsh
         run: |
           ../../scripts/PwshCheck.ps1 -uri https://openhackzkr4erh7userprofile-staging.azurewebsites.net/api/healthcheck/user
-         
+
+# This workflow performs a load test called "loadTesting"
+  loadTesting:
+    needs: [validateStaging]
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+        # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Run local k6 test
+        uses: k6io/action@v0.1
+        with:
+          filename: ../../scripts/script.js
 
   # This workflow contains a single job called "Swap to production"
   SwapToProduction:
-    needs: [validateStaging]
+    needs: [loadTesting]
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
         # Steps represent a sequence of tasks that will be executed as part of the job
