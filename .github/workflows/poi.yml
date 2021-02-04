@@ -5,7 +5,7 @@ name: poi
 defaults:
   run:
     shell: bash
-    working-directory: apis/poi/web
+    # working-directory: apis/poi/web
 
 # Controls when the action will run.
 on:
@@ -35,9 +35,34 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
+      - name: Add dotnet package
+        working-directory: apis/poi/tests/UnitTests
+        run: dotnet add package coverlet.msbuild
+      
+      - name: Install dependencies
+        run: dotnet restore apis/poi/web/*.csproj
+
+      - name: .NET Build Web
+        run: dotnet build --configuration Release --no-restore apis/poi/web/*.csproj
+      
+      - name: .NET Build Unit Tests
+        run: dotnet build --configuration Release apis/poi/tests/UnitTests/UnitTests.csproj
+
       # Runs a single command using the runners shell
       - name: Run unit test
-        run: dotnet test --no-restore --verbosity normal
+        # working-directory: apis/poi/tests/UnitTests
+        #run: dotnet test apis/poi/tests/UnitTests --no-restore --verbosity detailed /p:CollectCoverage=true /p:CoverletOutput=lcov/ /p:CoverletOutputFormat=lcov
+        run: dotnet test apis/poi/tests/UnitTests --verbosity detailed /p:CollectCoverage=true /p:CoverletOutputFormat=lcov
+        
+      - name: Find the file we are looking for
+        run: find . -name '*.info'
+
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: apis/poi/tests/UnitTests/coverage.info
+          flag-name: Unit
 
       # When run on failure log issue
       - name: Run on failure
