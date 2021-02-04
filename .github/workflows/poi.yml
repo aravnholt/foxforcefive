@@ -36,13 +36,13 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Add dotnet package
-        # working-directory: apis/poi/tests/UnitTests
+        working-directory: apis/poi/tests/UnitTests
         run: dotnet add package coverlet.msbuild
 
       # Runs a single command using the runners shell
       - name: Run unit test
         # working-directory: apis/poi/tests/UnitTests
-        run: dotnet test --no-restore --verbosity normal /p:CollectCoverage=true /p:CoverletOutput=lcov/ /p:CoverletOutputFormat=lcov
+        run: dotnet test apis/poi/tests/UnitTests --no-restore --verbosity normal /p:CollectCoverage=true /p:CoverletOutput=lcov/ /p:CoverletOutputFormat=lcov
 
       - name: Coveralls
 
@@ -51,7 +51,7 @@ jobs:
         with:
           github-token: ${​​{​​ secrets.GITHUB_TOKEN }​​}​​
           path-to-lcov: apis/poi/tests/UnitTests/lcov/coverage.info
-          base-path: app/poi
+          base-path: apis/poi
           flag-name: Unit
 
       # When run on failure log issue
