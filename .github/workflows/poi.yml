@@ -54,10 +54,6 @@ jobs:
       - name: .NET Build Unit Tests
         run: dotnet build --configuration Release apis/poi/tests/UnitTests/UnitTests.csproj
 
-      - name: dotnet package restore
-        working-directory: apis/poi/tests/UnitTests
-        run: dotnet package restore
-
       # Runs a single command using the runners shell
       - name: Run unit test
         # working-directory: apis/poi/tests/UnitTests
